@@ -1,0 +1,5 @@
+selenium
+pymongo
+lxml
+random_user_agent
+
