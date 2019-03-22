@@ -2,13 +2,21 @@ from setting import ACCOUNTS_FILE_NAME
 from setting import ACCOUNTS_FILE_SEP
 from db import Mongo
 
-class GetAccounts(object):
-    """ Get username and password from file"""
+class Accounts(object):
+    """ Provie operations about accounts"""
     def __init__(self, filename=ACCOUNTS_FILE_NAME, sep=ACCOUNTS_FILE_SEP):
         self.filename = ACCOUNTS_FILE_NAME
         self.sep = ACCOUNTS_FILE_SEP
         self.accounts = self.getall()
         self.db = Mongo()
+
+    def delete(self, username):
+        with open(self.filename, 'r') as f:
+            lines = f.readlines()
+        with open(self.filename, 'w') as f:
+            for line in lines:
+                if username not in line:
+                    f.write(line)
 
     def getall(self):
         """ Get a generator of username and password. 
@@ -27,6 +35,6 @@ class GetAccounts(object):
 
 
 if __name__ == "__main__":
-    a = GetAccounts().accounts
+    a = Accounts().accounts
     for i in a:
         print(i)

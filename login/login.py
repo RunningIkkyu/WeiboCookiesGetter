@@ -12,7 +12,7 @@ from random_user_agent.user_agent import UserAgent
 
 from proxy import GetProxy
 from db import Mongo
-from account import GetAccounts
+from account import Accounts
 from setting import PROXY_ENABLE, LOGIN_ENTRANCE
 
 
@@ -39,6 +39,10 @@ class Crack(object):
         with open(self.trackfilename,'r') as f:
             self.track = json.load(f)
 
+    def delete_account(self):
+        Accounts().delete(self.username)
+        print('[INFO] Delete {}'.format(self.username))
+
     def exist(self):
         """ Check if the username is verified before. """
         return self.db.exist(self.username)
@@ -53,7 +57,7 @@ class Crack(object):
         ua = UserAgent().get_random_user_agent()
         chrome_options = Options()
         chrome_options.add_argument('user-agent={}'.format(ua))
-        print('[INFO] Setting useragent success: {ua}')
+        print('[INFO] Setting useragent success: {}'.format(ua))
         #chrome_options.add_argument('--headless')
 
         # If proxy flag is open, then get a proxy.
@@ -141,8 +145,9 @@ class Crack(object):
         print('Ok')
 
         #WebDriverWait(self.driver, 10, 0.5).until(EC.presence_of_element_located(By.ID, 'errorMsg'))
-        if self.driver.find_element_by_xpath('//*[@id="errorMsg"]'):
+        if self.driver.find_element_by_xpath('//*[contains(text(),"用户名或密码错误"]'):
             print('Password wrong')
+            self.delete_account()
             return 
 
         # If their is a CAPTCHA, then crack it.
@@ -220,6 +225,6 @@ class Crack(object):
 
 
 if __name__ == '__main__':
-    accounts = list(GetAccounts().accounts)
+    accounts = list(Accounts().accounts)
     for username, password in accounts:
         Crack(username, password).run()

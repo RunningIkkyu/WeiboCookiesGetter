@@ -10,8 +10,8 @@ PROXY_ENABLE = True
 
 #-------------- Accounts -----------------
 # The filename of acocunts file
-ACCOUNTS_FILE_NAME = 'accounts.txt'
-ACCOUNTS_FILE_SEP = '-'
+ACCOUNTS_FILE_NAME = 'accounts4.txt'
+ACCOUNTS_FILE_SEP = '----'
 
 
 #-------------- Database -----------------
